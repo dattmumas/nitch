@@ -4,7 +4,12 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';
 
-const Logo = ({ width, height }) => {
+interface LogoProps {
+    width: number;
+    height: number;
+}
+
+const Logo: React.FC<LogoProps> = ({ width, height }) => {
     const { theme } = useTheme();
     const [windowWidth, setWindowWidth] = useState(0);
 

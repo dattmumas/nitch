@@ -8,13 +8,12 @@ import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin'
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
 import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary'
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin'
-import { HeadingNode, QuoteNode } from '@lexical/rich-text'
+import { HeadingNode, QuoteNode, $createHeadingNode } from '@lexical/rich-text'
 import { TableCellNode, TableNode, TableRowNode } from '@lexical/table'
 import { ListItemNode, ListNode } from '@lexical/list'
 import { CodeHighlightNode, CodeNode } from '@lexical/code'
 import { AutoLinkNode, LinkNode } from '@lexical/link'
 import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin'
-import ClickableLinkPlugin from './LexicalPlugins'
 import { ListPlugin } from '@lexical/react/LexicalListPlugin'
 import { MarkdownShortcutPlugin } from '@lexical/react/LexicalMarkdownShortcutPlugin'
 import { TRANSFORMERS } from '@lexical/markdown'
@@ -27,6 +26,8 @@ import { Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight, AlignJusti
 import {
   $getRoot,
   $getSelection,
+  $isRangeSelection,
+
   FORMAT_TEXT_COMMAND,
   FORMAT_ELEMENT_COMMAND,
   UNDO_COMMAND,
@@ -64,70 +65,51 @@ function ToolbarPlugin() {
     editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, format)
   }
 
-  const formatHeading = (format: 'h1' | 'h2' | 'h3') => {
-    editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, format)
-  }
-
   return (
     <div className="flex gap-2 mb-4 sticky top-0 z-10 p-2 shadow-sm border-b">
-      <Tooltip content="Bold">
+      <Tooltip>
         <Button onClick={() => formatText('bold')} variant="outline" size="icon">
           <Bold className="w-4 h-4" />
         </Button>
       </Tooltip>
-      <Tooltip content="Italic">
+      <Tooltip>
         <Button onClick={() => formatText('italic')} variant="outline" size="icon">
           <Italic className="w-4 h-4" />
         </Button>
       </Tooltip>
-      <Tooltip content="Underline">
+      <Tooltip>
         <Button onClick={() => formatText('underline')} variant="outline" size="icon">
           <Underline className="w-4 h-4" />
         </Button>
       </Tooltip>
-      <Tooltip content="Align Left">
+      <Tooltip>
         <Button onClick={() => formatElement('left')} variant="outline" size="icon">
           <AlignLeft className="w-4 h-4" />
         </Button>
       </Tooltip>
-      <Tooltip content="Align Center">
+      <Tooltip>
         <Button onClick={() => formatElement('center')} variant="outline" size="icon">
           <AlignCenter className="w-4 h-4" />
         </Button>
       </Tooltip>
-      <Tooltip content="Align Right">
+      <Tooltip>
         <Button onClick={() => formatElement('right')} variant="outline" size="icon">
           <AlignRight className="w-4 h-4" />
         </Button>
       </Tooltip>
-      <Tooltip content="Justify">
+      <Tooltip>
         <Button onClick={() => formatElement('justify')} variant="outline" size="icon">
           <AlignJustify className="w-4 h-4" />
         </Button>
       </Tooltip>
-      <Tooltip content="Undo">
+      <Tooltip>
         <Button onClick={() => editor.dispatchCommand(UNDO_COMMAND, undefined)} variant="outline" size="icon">
           <Undo className="w-4 h-4" />
         </Button>
       </Tooltip>
-      <Tooltip content="Redo">
+      <Tooltip>
         <Button onClick={() => editor.dispatchCommand(REDO_COMMAND, undefined)} variant="outline" size="icon">
           <Redo className="w-4 h-4" />
-        </Button>
-      </Tooltip>
-      <Tooltip content="Heading 1">
-        <Button onClick={() => formatHeading('h1')} variant="outline" size="icon">
-          H1
-        </Button>
-      </Tooltip>
-      <Tooltip content="Heading 2">
-        <Button onClick={() => formatHeading('h2')} variant="outline" size="icon">
-          H2
-        </Button>
-      </Tooltip>
-      <Tooltip content="Heading 3">
-        <Button onClick={() => formatHeading('h3')} variant="outline" size="icon">
-          H3
         </Button>
       </Tooltip>
     </div>
@@ -168,6 +150,8 @@ const theme = {
 }
 
 const editorConfig = {
+namespace: 'editor',
+
   theme,
   onError(error: Error) {
     console.error(error)

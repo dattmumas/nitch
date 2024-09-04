@@ -67,7 +67,7 @@ export function NavigationMenuDemo() {
                     href="/project" title='Project Manager'
                   >
                     <p className="text-sm leading-tight text-muted-foreground">
-                      Inspiration Management software that will take you from idea to post in record time, all while helping you make the best content you're capable of.
+                    Inspiration Management software that will take you from idea to post in record time, all while helping you make the best content you&apos;re capable of.
                     </p>
                   </a>
                 </NavigationMenuLink>

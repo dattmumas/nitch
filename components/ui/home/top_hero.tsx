@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
@@ -26,9 +26,9 @@ export default function Component() {
         setIsAnimating(false)
       }, 500) // Half of the transition duration
     }, 3000) // Change text every 3 seconds
-
+    
     return () => clearInterval(intervalId)
-  }, [nextTextIndex])
+  }, [nextTextIndex, cyclingTexts.length])
 
   return (
     <section className="w-full min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-background to-secondary/20 px-4 pt-6 pb-12">
@@ -52,7 +52,6 @@ export default function Component() {
         </div>
       </h1>
       <p className="text-xl md:text-2xl text-center mb-12 max-w-2xl text-muted-foreground">
-        Become the creator you were meant to be.
         Nitch is revolutionizing creator tools and making it easier for you to go from idea to post to profit. All in one platform.
       </p>
       <div className="flex flex-col sm:flex-row gap-4">
